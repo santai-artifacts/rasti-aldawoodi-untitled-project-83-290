@@ -12,10 +12,6 @@
       --bg: #0d1117;
       --surface: #161b22;
       --border: #30363d;
-      --snake-head: #4ade80;
-      --snake-body: #22c55e;
-      --food: #f97316;
-      --food-glow: rgba(249, 115, 22, 0.5);
       --text: #e6edf3;
       --muted: #8b949e;
       --accent: #4ade80;
@@ -30,13 +26,13 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 20px;
-      gap: 20px;
+      padding: 16px;
+      gap: 14px;
       user-select: none;
     }
 
     h1 {
-      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-size: clamp(1.4rem, 5vw, 2rem);
       font-weight: 700;
       letter-spacing: -0.5px;
       color: var(--accent);
@@ -44,15 +40,13 @@
 
     .stats {
       display: flex;
-      gap: 32px;
+      gap: 28px;
     }
 
-    .stat {
-      text-align: center;
-    }
+    .stat { text-align: center; }
 
     .stat-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1.5px;
@@ -60,7 +54,7 @@
     }
 
     .stat-value {
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       font-weight: 700;
       color: var(--text);
       line-height: 1.1;
@@ -71,13 +65,61 @@
       border-radius: 12px;
       overflow: hidden;
       border: 2px solid var(--border);
-      box-shadow: 0 0 40px rgba(74, 222, 128, 0.08), 0 8px 32px rgba(0,0,0,0.5);
+      box-shadow: 0 0 40px rgba(74,222,128,0.08), 0 8px 32px rgba(0,0,0,0.5);
     }
 
-    canvas {
-      display: block;
+    canvas { display: block; }
+
+    /* ── Effects bar ─────────────────────────────── */
+    .effects-bar {
+      display: none;
+      gap: 10px;
+      min-height: 36px;
+      align-items: center;
     }
 
+    .effect-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface);
+      border: 1px solid var(--pill-clr, #555);
+      border-radius: 99px;
+      padding: 4px 10px 4px 7px;
+      box-shadow: 0 0 8px color-mix(in srgb, var(--pill-clr) 40%, transparent);
+    }
+
+    .pill-icon {
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+
+    .pill-info { display: flex; flex-direction: column; gap: 2px; }
+
+    .pill-name {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--pill-clr, #fff);
+    }
+
+    .pill-bar {
+      width: 72px;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .pill-fill {
+      height: 100%;
+      background: var(--pill-clr, #fff);
+      border-radius: 99px;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Overlays ────────────────────────────────── */
     .overlay {
       position: absolute;
       inset: 0;
@@ -85,23 +127,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      background: rgba(13, 17, 23, 0.88);
+      gap: 12px;
+      background: rgba(13,17,23,0.88);
       backdrop-filter: blur(6px);
       transition: opacity 0.25s;
     }
 
     .overlay.hidden { opacity: 0; pointer-events: none; }
-
-    .overlay h2 {
-      font-size: clamp(1.4rem, 5vw, 2rem);
-      font-weight: 700;
-    }
-
-    .overlay p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
+    .overlay h2 { font-size: clamp(1.3rem, 5vw, 2rem); font-weight: 700; }
+    .overlay p  { color: var(--muted); font-size: 0.9rem; }
 
     .overlay .final-score {
       font-size: 3rem;
@@ -110,29 +144,48 @@
       line-height: 1;
     }
 
+    /* Power-up legend on start screen */
+    .pu-legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .pu-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 99px;
+      border: 1px solid;
+      opacity: 0.9;
+    }
+
     .btn {
       background: var(--accent);
       color: #0d1117;
       border: none;
       border-radius: 8px;
-      padding: 12px 32px;
+      padding: 11px 30px;
       font-family: inherit;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       transition: transform 0.1s, opacity 0.1s;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
     .btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn:active { transform: translateY(0); }
 
+    /* ── Controls / D-pad ───────────────────────── */
     .controls {
       display: flex;
       gap: 16px;
       align-items: center;
       color: var(--muted);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
 
     .key {
@@ -140,11 +193,10 @@
       border: 1px solid var(--border);
       border-radius: 5px;
       padding: 3px 8px;
-      font-size: 0.75rem;
+      font-size: 0.73rem;
       color: var(--text);
     }
 
-    /* Mobile d-pad */
     .dpad {
       display: none;
       grid-template-columns: repeat(3, 48px);
@@ -160,16 +212,14 @@
       font-size: 1.2rem;
       cursor: pointer;
       transition: background 0.1s, transform 0.1s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
     }
 
     .dpad button:active { background: var(--border); transform: scale(0.93); }
     .dpad .blank { visibility: hidden; }
 
     @media (max-width: 540px) {
-      .dpad { display: grid; }
+      .dpad     { display: grid; }
       .controls { display: none; }
     }
 
@@ -199,21 +249,27 @@
   <div class="canvas-wrap">
     <canvas id="canvas"></canvas>
 
-    <!-- Start screen -->
     <div class="overlay" id="startScreen">
       <h2>Snake</h2>
-      <p>Eat food. Don't crash.</p>
+      <p>Eat food. Collect power-ups.</p>
+      <div class="pu-legend">
+        <span class="pu-badge" style="color:#fbbf24;border-color:#fbbf2466">⚡ Speed Boost</span>
+        <span class="pu-badge" style="color:#22d3ee;border-color:#22d3ee66">↕ Shrink</span>
+        <span class="pu-badge" style="color:#a78bfa;border-color:#a78bfa66">◈ Shield</span>
+      </div>
       <button class="btn" id="startBtn">Start Game</button>
     </div>
 
-    <!-- Game over screen -->
     <div class="overlay hidden" id="gameOverScreen">
       <h2>Game Over</h2>
       <div class="final-score" id="finalScore">0</div>
-      <p id="newBestMsg" style="color: var(--accent); display:none;">New best score!</p>
+      <p id="newBestMsg" style="color:var(--accent);display:none">New best score!</p>
       <button class="btn" id="restartBtn">Play Again</button>
     </div>
   </div>
+
+  <!-- Active power-up pills -->
+  <div class="effects-bar" id="effectsBar"></div>
 
   <div class="controls">
     <span><span class="key">↑↓←→</span> or <span class="key">WASD</span> Move</span>
@@ -233,23 +289,37 @@
   </div>
 
   <script>
+    // ── Canvas setup ─────────────────────────────────────────────────────────
     const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx    = canvas.getContext('2d');
 
     const COLS = 24, ROWS = 24;
-    const CELL = Math.min(Math.floor(Math.min(window.innerWidth - 40, window.innerHeight - 220) / COLS), 22);
+    const CELL = Math.min(
+      Math.floor(Math.min(window.innerWidth - 40, window.innerHeight - 280) / COLS),
+      22
+    );
     canvas.width  = COLS * CELL;
     canvas.height = ROWS * CELL;
 
-    const scoreEl   = document.getElementById('score');
-    const bestEl    = document.getElementById('best');
-    const levelEl   = document.getElementById('level');
-    const finalEl   = document.getElementById('finalScore');
-    const newBestEl = document.getElementById('newBestMsg');
-    const startSc   = document.getElementById('startScreen');
-    const gameOverSc= document.getElementById('gameOverScreen');
+    // ── DOM refs ─────────────────────────────────────────────────────────────
+    const scoreEl    = document.getElementById('score');
+    const bestEl     = document.getElementById('best');
+    const levelEl    = document.getElementById('level');
+    const finalEl    = document.getElementById('finalScore');
+    const newBestEl  = document.getElementById('newBestMsg');
+    const startSc    = document.getElementById('startScreen');
+    const gameOverSc = document.getElementById('gameOverScreen');
+    const effectsBar = document.getElementById('effectsBar');
 
-    // Audio
+    // ── Power-up config ──────────────────────────────────────────────────────
+    const POWERUP_CONFIG = {
+      boost:  { color: '#fbbf24', name: 'Speed Boost', duration: 5000 },
+      shield: { color: '#a78bfa', name: 'Shield',      duration: 6000 },
+      shrink: { color: '#22d3ee', name: 'Shrink',      duration: 0    }, // instant
+    };
+    const POWERUP_LIFESPAN = 8000; // ms until it disappears
+
+    // ── Audio ────────────────────────────────────────────────────────────────
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
 
@@ -267,28 +337,78 @@
       } catch(e) {}
     }
 
-    function eatSound()  { beep(440, 0.08); beep(660, 0.08); }
-    function dieSound()  { beep(220, 0.15, 'sawtooth', 0.1); beep(110, 0.3, 'sawtooth', 0.1); }
+    function eatSound()     { beep(440, 0.07); beep(660, 0.07); }
+    function dieSound()     { beep(220, 0.15, 'sawtooth', 0.1); beep(110, 0.3, 'sawtooth', 0.1); }
+    function boostSound()   { beep(660, 0.06); beep(880, 0.06); beep(1100, 0.1); }
+    function shieldSound()  { beep(440, 0.06, 'sine'); beep(660, 0.06, 'sine'); beep(880, 0.12, 'sine'); }
+    function shrinkSound()  { beep(660, 0.05); beep(440, 0.05); beep(330, 0.1, 'sine', 0.1); }
 
-    // State
-    let snake, dir, nextDir, food, score, best = 0, level, gameLoop, paused, alive;
-    let eatAnim = 0; // frames of food-eat flash
+    // ── State ────────────────────────────────────────────────────────────────
+    const BASE_INTERVAL = 150;
+    const LEVEL_SCORE   = 5;
 
-    const BASE_INTERVAL = 150; // ms
-    const LEVEL_SCORE   = 5;   // points per level
+    let snake, dir, nextDir, food, score, best = 0, level, paused, alive;
+    let eatAnim    = 0;
+    let shrinkFlash = 0;
+    let powerup    = null;   // { type, x, y, spawnedAt }
+    let activeEffects = {};  // { boost: expiresAt?, shield: expiresAt? }
+    let rafId      = null;
+    let lastStep   = 0;
+    let animTime   = 0;
+    let lastEffectsUpdate = 0;
 
     function levelInterval(lvl) {
       return Math.max(BASE_INTERVAL - (lvl - 1) * 12, 60);
     }
 
-    function randFood() {
-      const occupied = new Set(snake.map(s => `${s.x},${s.y}`));
+    function getStepInterval() {
+      let base = levelInterval(level);
+      if (activeEffects.boost && activeEffects.boost > animTime) {
+        base = Math.max(Math.floor(base * 0.45), 35);
+      }
+      return base;
+    }
+
+    // ── Positions ────────────────────────────────────────────────────────────
+    function randPos(...exclude) {
+      const occupied = new Set([
+        ...snake.map(s => `${s.x},${s.y}`),
+        ...exclude.map(p => `${p.x},${p.y}`),
+      ]);
       let pos;
-      do { pos = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) }; }
-      while (occupied.has(`${pos.x},${pos.y}`));
+      do {
+        pos = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
+      } while (occupied.has(`${pos.x},${pos.y}`));
       return pos;
     }
 
+    // ── Power-up logic ───────────────────────────────────────────────────────
+    function trySpawnPowerup() {
+      if (powerup || Math.random() > 0.28 || snake.length < 4) return;
+      let types = ['boost', 'shield', 'shrink'];
+      if (snake.length <= 5) types = ['boost', 'shield'];
+      const type = types[Math.floor(Math.random() * types.length)];
+      const pos  = randPos(food);
+      powerup = { type, x: pos.x, y: pos.y, spawnedAt: animTime };
+    }
+
+    function collectPowerup(type) {
+      if (type === 'boost') {
+        activeEffects.boost = animTime + POWERUP_CONFIG.boost.duration;
+        boostSound();
+      } else if (type === 'shield') {
+        activeEffects.shield = animTime + POWERUP_CONFIG.shield.duration;
+        shieldSound();
+      } else if (type === 'shrink') {
+        snake = snake.slice(0, Math.max(3, Math.floor(snake.length / 2)));
+        shrinkFlash = 10;
+        shrinkSound();
+      }
+      powerup = null;
+      updateEffectsUI();
+    }
+
+    // ── Game init ────────────────────────────────────────────────────────────
     function initGame() {
       const mid = Math.floor(COLS / 2);
       snake = [
@@ -298,9 +418,13 @@
       ];
       dir = { x: 1, y: 0 };
       nextDir = { ...dir };
-      score = 0; level = 1; alive = true; paused = false; eatAnim = 0;
-      food = randFood();
+      score = 0; level = 1; alive = true; paused = false;
+      eatAnim = 0; shrinkFlash = 0;
+      food = randPos();
+      powerup = null;
+      activeEffects = {};
       updateHUD();
+      updateEffectsUI();
     }
 
     function updateHUD() {
@@ -309,18 +433,66 @@
       levelEl.textContent = level;
     }
 
+    function updateEffectsUI() {
+      const now = animTime;
+      const pills = [];
+
+      if (activeEffects.boost && activeEffects.boost > now) {
+        const pct = ((activeEffects.boost - now) / POWERUP_CONFIG.boost.duration) * 100;
+        pills.push({ type: 'boost',  pct });
+      }
+      if (activeEffects.shield && activeEffects.shield > now) {
+        const pct = ((activeEffects.shield - now) / POWERUP_CONFIG.shield.duration) * 100;
+        pills.push({ type: 'shield', pct });
+      }
+
+      effectsBar.innerHTML = pills.map(p => {
+        const cfg = POWERUP_CONFIG[p.type];
+        const icon = p.type === 'boost' ? '⚡' : '◈';
+        return `<div class="effect-pill" style="--pill-clr:${cfg.color}">
+          <div class="pill-icon">${icon}</div>
+          <div class="pill-info">
+            <div class="pill-name">${cfg.name}</div>
+            <div class="pill-bar"><div class="pill-fill" style="width:${p.pct.toFixed(1)}%"></div></div>
+          </div>
+        </div>`;
+      }).join('');
+
+      effectsBar.style.display = pills.length ? 'flex' : 'none';
+    }
+
+    // ── Step ─────────────────────────────────────────────────────────────────
     function step() {
       if (!alive || paused) return;
+
+      const now = animTime;
+
+      // Expire active effects
+      if (activeEffects.boost  && now > activeEffects.boost)  { delete activeEffects.boost;  updateEffectsUI(); }
+      if (activeEffects.shield && now > activeEffects.shield) { delete activeEffects.shield; updateEffectsUI(); }
+
+      // Expire on-board power-up
+      if (powerup && now - powerup.spawnedAt > POWERUP_LIFESPAN) powerup = null;
 
       dir = { ...nextDir };
       const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
 
-      // Wall collision
+      const shielded = !!(activeEffects.shield && activeEffects.shield > now);
+
+      // Wall collision — shield wraps
       if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
-        endGame(); return;
+        if (shielded) {
+          if (head.x < 0)    head.x = COLS - 1;
+          if (head.x >= COLS) head.x = 0;
+          if (head.y < 0)    head.y = ROWS - 1;
+          if (head.y >= ROWS) head.y = 0;
+        } else {
+          endGame(); return;
+        }
       }
-      // Self collision
-      if (snake.some(s => s.x === head.x && s.y === head.y)) {
+
+      // Self collision — shield phases through
+      if (!shielded && snake.some(s => s.x === head.x && s.y === head.y)) {
         endGame(); return;
       }
 
@@ -331,21 +503,23 @@
         eatAnim = 8;
         if (score % LEVEL_SCORE === 0) level++;
         updateHUD();
-        food = randFood();
+        food = randPos(powerup || {});
         eatSound();
-        // Restart loop at new speed
-        clearInterval(gameLoop);
-        gameLoop = setInterval(step, levelInterval(level));
+        trySpawnPowerup();
       } else {
         snake.pop();
       }
 
-      draw();
+      if (powerup && head.x === powerup.x && head.y === powerup.y) {
+        collectPowerup(powerup.type);
+      }
+
+      if (shrinkFlash > 0) shrinkFlash--;
     }
 
     function endGame() {
       alive = false;
-      clearInterval(gameLoop);
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       dieSound();
       const isNew = score > best;
       if (isNew) best = score;
@@ -353,10 +527,111 @@
       finalEl.textContent = score;
       newBestEl.style.display = isNew ? 'block' : 'none';
       gameOverSc.classList.remove('hidden');
+      updateEffectsUI();
       draw();
     }
 
-    // Drawing
+    // ── Drawing ───────────────────────────────────────────────────────────────
+    function roundRect(cx, cy, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(cx + r, cy);
+      ctx.lineTo(cx + w - r, cy);
+      ctx.quadraticCurveTo(cx + w, cy, cx + w, cy + r);
+      ctx.lineTo(cx + w, cy + h - r);
+      ctx.quadraticCurveTo(cx + w, cy + h, cx + w - r, cy + h);
+      ctx.lineTo(cx + r, cy + h);
+      ctx.quadraticCurveTo(cx, cy + h, cx, cy + h - r);
+      ctx.lineTo(cx, cy + r);
+      ctx.quadraticCurveTo(cx, cy, cx + r, cy);
+      ctx.closePath();
+    }
+
+    function drawBoostIcon(cx, cy, s) {
+      ctx.beginPath();
+      ctx.moveTo(cx + s*0.22, cy - s*0.48);
+      ctx.lineTo(cx - s*0.10, cy + s*0.02);
+      ctx.lineTo(cx + s*0.16, cy + s*0.02);
+      ctx.lineTo(cx - s*0.22, cy + s*0.48);
+      ctx.lineTo(cx + s*0.10, cy - s*0.02);
+      ctx.lineTo(cx - s*0.16, cy - s*0.02);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawShieldIcon(cx, cy, s) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - s*0.48);
+      ctx.lineTo(cx + s*0.40, cy - s*0.20);
+      ctx.lineTo(cx + s*0.40, cy + s*0.10);
+      ctx.bezierCurveTo(cx + s*0.40, cy + s*0.36, cx + s*0.15, cy + s*0.48, cx, cy + s*0.48);
+      ctx.bezierCurveTo(cx - s*0.15, cy + s*0.48, cx - s*0.40, cy + s*0.36, cx - s*0.40, cy + s*0.10);
+      ctx.lineTo(cx - s*0.40, cy - s*0.20);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawShrinkIcon(cx, cy, s) {
+      ctx.lineWidth = s * 0.2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = ctx.fillStyle;
+      // upper ▼ chevron
+      ctx.beginPath();
+      ctx.moveTo(cx - s*0.32, cy - s*0.44);
+      ctx.lineTo(cx, cy - s*0.14);
+      ctx.lineTo(cx + s*0.32, cy - s*0.44);
+      ctx.stroke();
+      // lower ▲ chevron
+      ctx.beginPath();
+      ctx.moveTo(cx - s*0.32, cy + s*0.44);
+      ctx.lineTo(cx, cy + s*0.14);
+      ctx.lineTo(cx + s*0.32, cy + s*0.44);
+      ctx.stroke();
+    }
+
+    function drawPowerupOnBoard() {
+      if (!powerup) return;
+      const cfg   = POWERUP_CONFIG[powerup.type];
+      const cx    = powerup.x * CELL + CELL / 2;
+      const cy    = powerup.y * CELL + CELL / 2;
+      const age   = animTime - powerup.spawnedAt;
+      const life  = 1 - age / POWERUP_LIFESPAN;
+
+      // Pulse & blink when near expiry
+      const pulse = 1 + 0.13 * Math.sin(animTime * 0.006);
+      const blink = life < 0.25 ? 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(animTime * 0.025)) : 1;
+      const r = CELL * 0.4 * pulse;
+
+      ctx.globalAlpha = blink;
+      ctx.shadowColor = cfg.color;
+      ctx.shadowBlur  = 18 * life;
+
+      // Glow ring
+      ctx.strokeStyle = cfg.color;
+      ctx.lineWidth   = 1.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + 2, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Fill circle
+      ctx.fillStyle = cfg.color + '28';
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+
+      // Icon
+      ctx.fillStyle = cfg.color;
+      const s = CELL * 0.36;
+      if (powerup.type === 'boost')  drawBoostIcon(cx, cy, s);
+      if (powerup.type === 'shield') drawShieldIcon(cx, cy, s);
+      if (powerup.type === 'shrink') drawShrinkIcon(cx, cy, s);
+
+      ctx.globalAlpha = 1;
+      ctx.lineWidth   = 1;
+    }
+
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -370,58 +645,90 @@
         ctx.beginPath(); ctx.moveTo(0, y * CELL); ctx.lineTo(canvas.width, y * CELL); ctx.stroke();
       }
 
+      // Power-up
+      drawPowerupOnBoard();
+
       // Food
-      const fx = food.x * CELL + CELL / 2;
-      const fy = food.y * CELL + CELL / 2;
-      const fRadius = CELL * 0.38;
       ctx.shadowColor = '#f97316';
-      ctx.shadowBlur = 14 + (eatAnim > 0 ? 10 : 0);
-      ctx.fillStyle = '#f97316';
+      ctx.shadowBlur  = 14 + (eatAnim > 0 ? 12 : 0);
+      ctx.fillStyle   = '#f97316';
       ctx.beginPath();
-      ctx.arc(fx, fy, fRadius, 0, Math.PI * 2);
+      ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL * 0.38, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
       if (eatAnim > 0) eatAnim--;
 
+      // State flags
+      const now      = animTime;
+      const shielded = !!(activeEffects.shield && activeEffects.shield > now);
+      const boosted  = !!(activeEffects.boost  && activeEffects.boost  > now);
+      const flashing = shrinkFlash > 0 && shrinkFlash % 2 === 0;
+
       // Snake
       snake.forEach((seg, i) => {
         const isHead = i === 0;
-        const t = 1 - i / snake.length;
-        const alpha = 0.5 + t * 0.5;
-        const pad = isHead ? 1 : 2;
-        const radius = isHead ? CELL * 0.38 : CELL * 0.32;
+        const t      = 1 - i / snake.length;
+        const alpha  = 0.5 + t * 0.5;
+        const pad    = isHead ? 1 : 2;
+        const r      = isHead ? CELL * 0.38 : CELL * 0.32;
         const x = seg.x * CELL + pad;
         const y = seg.y * CELL + pad;
         const w = CELL - pad * 2;
         const h = CELL - pad * 2;
 
-        ctx.shadowColor = isHead ? 'rgba(74,222,128,0.6)' : 'transparent';
-        ctx.shadowBlur  = isHead ? 10 : 0;
+        // Head glow
+        if (isHead) {
+          if (shielded) {
+            const p = 0.6 + 0.4 * Math.sin(animTime * 0.008);
+            ctx.shadowColor = `rgba(167,139,250,${p})`;
+            ctx.shadowBlur  = 20;
+          } else if (boosted) {
+            ctx.shadowColor = 'rgba(251,191,36,0.75)';
+            ctx.shadowBlur  = 16;
+          } else {
+            ctx.shadowColor = 'rgba(74,222,128,0.6)';
+            ctx.shadowBlur  = 10;
+          }
+        } else {
+          ctx.shadowBlur = 0;
+        }
 
-        ctx.fillStyle = isHead
-          ? `rgba(74,222,128,${alpha})`
-          : `rgba(34,197,94,${alpha * 0.85})`;
+        // Segment color
+        if (flashing) {
+          ctx.fillStyle = `rgba(34,211,238,${alpha * 0.95})`;
+        } else if (shielded) {
+          ctx.fillStyle = isHead
+            ? `rgba(192,170,250,${alpha})`
+            : `rgba(167,139,250,${alpha * 0.85})`;
+        } else if (boosted) {
+          ctx.fillStyle = isHead
+            ? `rgba(251,191,36,${alpha})`
+            : `rgba(234,179,8,${alpha * 0.85})`;
+        } else {
+          ctx.fillStyle = isHead
+            ? `rgba(74,222,128,${alpha})`
+            : `rgba(34,197,94,${alpha * 0.85})`;
+        }
 
-        roundRect(ctx, x, y, w, h, Math.min(radius, w / 2, h / 2));
+        roundRect(x, y, w, h, Math.min(r, w / 2, h / 2));
         ctx.fill();
         ctx.shadowBlur = 0;
 
         // Eyes on head
         if (isHead) {
           ctx.fillStyle = '#0d1117';
-          const ex = dir.y !== 0 ? 0.28 : dir.x > 0 ? 0.62 : 0.28;
-          const ey = dir.x !== 0 ? 0.28 : dir.y > 0 ? 0.62 : 0.28;
+          const ex  = dir.y !== 0 ? 0.28 : dir.x > 0 ? 0.62 : 0.28;
+          const ey  = dir.x !== 0 ? 0.28 : dir.y > 0 ? 0.62 : 0.28;
           const ex2 = dir.y !== 0 ? 0.72 : ex;
           const ey2 = dir.x !== 0 ? 0.72 : ey;
-          const er = CELL * 0.1;
-          ctx.beginPath(); ctx.arc(seg.x * CELL + CELL * ex,  seg.y * CELL + CELL * ey,  er, 0, Math.PI * 2); ctx.fill();
-          ctx.beginPath(); ctx.arc(seg.x * CELL + CELL * ex2, seg.y * CELL + CELL * ey2, er, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(seg.x * CELL + CELL * ex,  seg.y * CELL + CELL * ey,  CELL * 0.1, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(seg.x * CELL + CELL * ex2, seg.y * CELL + CELL * ey2, CELL * 0.1, 0, Math.PI * 2); ctx.fill();
         }
       });
 
-      // Pause overlay on canvas
+      // Paused overlay
       if (paused && alive) {
-        ctx.fillStyle = 'rgba(13,17,23,0.7)';
+        ctx.fillStyle = 'rgba(13,17,23,0.72)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#e6edf3';
         ctx.font = `700 ${CELL * 1.6}px 'Space Grotesk', sans-serif`;
@@ -431,30 +738,38 @@
       }
     }
 
-    function roundRect(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
+    // ── Game loop (rAF) ──────────────────────────────────────────────────────
+    function loop(ts) {
+      if (!alive) return;
+      animTime = ts;
+      rafId = requestAnimationFrame(loop);
+
+      const now = performance.now();
+      if (ts - lastStep >= getStepInterval()) {
+        lastStep = ts;
+        step();
+      }
+
+      if (ts - lastEffectsUpdate > 100) {
+        lastEffectsUpdate = ts;
+        updateEffectsUI();
+      }
+
+      draw();
     }
 
     function startGame() {
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       initGame();
       startSc.classList.add('hidden');
       gameOverSc.classList.add('hidden');
-      draw();
-      gameLoop = setInterval(step, levelInterval(level));
+      lastStep = performance.now();
+      animTime = performance.now();
+      rafId = requestAnimationFrame(loop);
     }
 
-    // Input
-    const DIRS = {
+    // ── Input ────────────────────────────────────────────────────────────────
+    const DIR_MAP = {
       ArrowUp:    { x:  0, y: -1 }, w: { x:  0, y: -1 },
       ArrowDown:  { x:  0, y:  1 }, s: { x:  0, y:  1 },
       ArrowLeft:  { x: -1, y:  0 }, a: { x: -1, y:  0 },
@@ -462,24 +777,24 @@
     };
 
     document.addEventListener('keydown', e => {
-      const key = e.key === ' ' ? 'p' : e.key.toLowerCase();
-      if (key === 'p') { paused = !paused; draw(); return; }
-      const d = DIRS[e.key] || DIRS[key];
+      const key = e.key.toLowerCase();
+      if (key === 'p' || e.key === ' ') { if (alive) { paused = !paused; draw(); } return; }
+      const d = DIR_MAP[e.key] || DIR_MAP[key];
       if (!d) return;
       if (d.x !== -dir.x || d.y !== -dir.y) nextDir = d;
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
+      if (e.key.startsWith('Arrow')) e.preventDefault();
     });
 
     function dpadPress(dx, dy) {
       if (dx !== -dir.x || dy !== -dir.y) nextDir = { x: dx, y: dy };
     }
 
-    document.getElementById('dUp').addEventListener('click',    () => dpadPress( 0,-1));
-    document.getElementById('dDown').addEventListener('click',  () => dpadPress( 0, 1));
-    document.getElementById('dLeft').addEventListener('click',  () => dpadPress(-1, 0));
-    document.getElementById('dRight').addEventListener('click', () => dpadPress( 1, 0));
+    document.getElementById('dUp').addEventListener('click',    () => dpadPress( 0, -1));
+    document.getElementById('dDown').addEventListener('click',  () => dpadPress( 0,  1));
+    document.getElementById('dLeft').addEventListener('click',  () => dpadPress(-1,  0));
+    document.getElementById('dRight').addEventListener('click', () => dpadPress( 1,  0));
 
-    document.getElementById('startBtn').addEventListener('click', startGame);
+    document.getElementById('startBtn').addEventListener('click',   startGame);
     document.getElementById('restartBtn').addEventListener('click', startGame);
 
     // Touch swipe
@@ -489,12 +804,12 @@
       if (!touchStart) return;
       const dx = e.changedTouches[0].clientX - touchStart.clientX;
       const dy = e.changedTouches[0].clientY - touchStart.clientY;
-      if (Math.abs(dx) > Math.abs(dy)) { dpadPress(dx > 0 ? 1 : -1, 0); }
-      else { dpadPress(0, dy > 0 ? 1 : -1); }
+      if (Math.abs(dx) > Math.abs(dy)) dpadPress(dx > 0 ? 1 : -1, 0);
+      else                              dpadPress(0, dy > 0 ? 1 : -1);
       touchStart = null;
     }, { passive: true });
 
-    // Initial draw
+    // ── Initial render ───────────────────────────────────────────────────────
     initGame();
     draw();
   </script>
